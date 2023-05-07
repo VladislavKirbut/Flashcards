@@ -1,0 +1,19 @@
+CREATE TABLE account(
+	id BIGSERIAL PRIMARY KEY,
+	name VARCHAR(128) NOT NULL,
+	surname VARCHAR(128), NOT NULL
+);
+
+CREATE TABLE cards_group(
+	id BIGSERIAL PRIMARY KEY,
+	title VARCHAR(128) NOT NULL,
+	user_id BIGINT NOT NULL REFERENCES account,
+);
+
+CREATE TABLE cards_group_item(
+	id BIGSERIAL PRIMARY KEY,
+	question VARCHAR(400) NOT NULL,
+    	answer VARCHAR(400) NOT NULL,
+	is_remember INTEGER,
+	group_id BIGINT NOT NULL REFRENCES cards_group(id),
+);
