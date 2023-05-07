@@ -1,19 +1,30 @@
-CREATE TABLE account(
-	id BIGSERIAL PRIMARY KEY,
-	name VARCHAR(128) NOT NULL,
-	surname VARCHAR(128), NOT NULL
+CREATE TABLE account
+(
+	a_id BIGSERIAL PRIMARY KEY,
+	a_name VARCHAR(30) NOT NULL,
+	a_surname VARCHAR(30) NOT NULL
+	a_email VARCHAR(50) NOT NULL UNIQUE
 );
 
-CREATE TABLE cards_group(
-	id BIGSERIAL PRIMARY KEY,
-	title VARCHAR(128) NOT NULL,
-	user_id BIGINT NOT NULL REFERENCES account,
+CREATE TABLE group
+(
+	g_id BIGSERIAL PRIMARY KEY,
+	g_title VARCHAR(100) NOT NULL UNIQUE,
+	g_user_id BIGINT NOT NULL REFERENCES account(id),
 );
 
-CREATE TABLE cards_group_item(
-	id BIGSERIAL PRIMARY KEY,
-	question VARCHAR(400) NOT NULL,
-    	answer VARCHAR(400) NOT NULL,
-	is_remember INTEGER,
-	group_id BIGINT NOT NULL REFRENCES cards_group(id),
+CREATE TABLE subgroup
+(
+	sub_id BESERIAL PRIMARY_KEY,
+	sub_title VARCHAR(100) NOT NULL UNIQUE,
+	sub_group_id BIGINT NOT NULL REFERENCES group(id)
+);
+
+CREATE TABLE card
+(
+	c_id BIGSERIAL PRIMARY KEY,
+	c_question VARCHAR(200) NOT NULL,
+    c_answer VARCHAR(200) NOT NULL,
+	c_isremember BOOLEAN,
+	c_group_id BIGINT NOT NULL REFRENCES subgroup(id),
 );
