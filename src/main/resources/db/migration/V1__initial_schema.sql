@@ -24,7 +24,7 @@ CREATE TABLE card
 (
 	c_id BIGSERIAL PRIMARY KEY,
 	c_question VARCHAR(200) NOT NULL,
-    c_answer VARCHAR(200) NOT NULL,
+    	c_answer VARCHAR(200) NOT NULL,
 	c_isremember BOOLEAN NOT NULL,
 	c_group_id BIGINT NOT NULL REFRENCES subgroup(id),
 );
