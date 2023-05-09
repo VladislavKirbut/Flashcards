@@ -6,18 +6,18 @@ CREATE TABLE account
 	a_email VARCHAR(50) NOT NULL UNIQUE
 );
 
-CREATE TABLE group
+CREATE TABLE topic
 (
-	g_id BIGSERIAL PRIMARY KEY,
-	g_title VARCHAR(100) NOT NULL UNIQUE,
-	g_user_id BIGINT NOT NULL REFERENCES account(id),
+	t_id BIGSERIAL PRIMARY KEY,
+	t_title VARCHAR(100) NOT NULL UNIQUE,
+	t_user_id BIGINT NOT NULL REFERENCES account(a_id),
 );
 
-CREATE TABLE subgroup
+CREATE TABLE subtopic
 (
 	sub_id BESERIAL PRIMARY_KEY,
 	sub_title VARCHAR(100) NOT NULL UNIQUE,
-	sub_group_id BIGINT NOT NULL REFERENCES group(id)
+	sub_group_id BIGINT NOT NULL REFERENCES group(t_id)
 );
 
 CREATE TABLE card
@@ -26,5 +26,5 @@ CREATE TABLE card
 	c_question VARCHAR(200) NOT NULL,
     	c_answer VARCHAR(200) NOT NULL,
 	c_isremember BOOLEAN NOT NULL,
-	c_group_id BIGINT NOT NULL REFRENCES subgroup(id),
+	c_group_id BIGINT NOT NULL REFRENCES subgroup(sub_id),
 );
