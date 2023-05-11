@@ -1,30 +1,22 @@
-CREATE TABLE account
+CREATE TABLE topic
 (
-	a_id BIGSERIAL PRIMARY KEY,
-	a_name VARCHAR(30) NOT NULL,
-	a_surname VARCHAR(30) NOT NULL
-	a_email VARCHAR(50) NOT NULL UNIQUE
+    id BIGSERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    count BIGINT NOT NULL
 );
 
-CREATE TABLE group
+CREATE TABLE subtopic
 (
-	g_id BIGSERIAL PRIMARY KEY,
-	g_title VARCHAR(100) NOT NULL UNIQUE,
-	g_user_id BIGINT NOT NULL REFERENCES account(id),
-);
-
-CREATE TABLE subgroup
-(
-	sub_id BESERIAL PRIMARY_KEY,
-	sub_title VARCHAR(100) NOT NULL UNIQUE,
-	sub_group_id BIGINT NOT NULL REFERENCES group(id)
+    id BIGSERIAL PRIMARY KEY,
+    topic_id BIGINT NOT NULL REFERENCES topic(id),
+    title TEXT NOT NULL
 );
 
 CREATE TABLE card
 (
-	c_id BIGSERIAL PRIMARY KEY,
-	c_question VARCHAR(200) NOT NULL,
-    c_answer VARCHAR(200) NOT NULL,
-	c_isremember BOOLEAN,
-	c_group_id BIGINT NOT NULL REFRENCES subgroup(id),
+    id BIGSERIAL PRIMARY KEY,
+    group_id BIGINT NOT NULL REFERENCES subtopic(id),
+    question TEXT NOT NULL,
+    answer TEXT NOT NULL,
+    learned BOOLEAN NOT NULL
 );
