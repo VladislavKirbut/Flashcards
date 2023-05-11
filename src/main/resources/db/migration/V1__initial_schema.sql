@@ -2,7 +2,6 @@ CREATE TABLE topic
 (
     id BIGSERIAL PRIMARY KEY,
     title TEXT NOT NULL,
-    count BIGINT NOT NULL
 );
 
 CREATE TABLE subtopic
