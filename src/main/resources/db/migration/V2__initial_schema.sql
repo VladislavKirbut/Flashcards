@@ -82,10 +82,15 @@ WHERE id = ?;
 -- ТРЕНИРОВКА
 
 -- при нажатии на набор (переход на подтемы - таблица subtopic)
-SELECT id,
-       title
+SELECT subtopic.id                                           AS id,
+       subtopic.topic_id                                     AS topic_id,
+       subtopic.title                                        AS title,
+       count(c.id)                                           AS total_cards_count,
+       count(c.learned) FILTER ( WHERE c.learned = true)     AS learned_cards_count
 FROM subtopic
-WHERE topic_id = ?;
+        LEFT JOIN card c ON subtopic.id = c.subtopic_id
+WHERE topic_id = ?
+GROUP BY subtopic.id;
 
 --при нажатии на подтему (переход в режим тренировки) или при нажатии знаю / не знаю
 SELECT id,
