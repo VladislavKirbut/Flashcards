@@ -14,7 +14,7 @@ CREATE TABLE subtopic
 CREATE TABLE card
 (
     id BIGSERIAL PRIMARY KEY,
-    group_id BIGINT NOT NULL REFERENCES subtopic(id),
+    subtopic_id BIGINT NOT NULL REFERENCES subtopic(id),
     question TEXT NOT NULL,
     answer TEXT NOT NULL,
     learned BOOLEAN NOT NULL
