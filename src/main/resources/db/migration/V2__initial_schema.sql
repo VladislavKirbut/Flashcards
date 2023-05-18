@@ -40,26 +40,26 @@ VALUES (1, 'Juice', 'Сок', false),
        (8, 'Racket', 'Ракетка', false);
 
 -- РЕДАКТИРОВАНИЕ / ДОБАВЛЕНИЕ
--- при нажатии добавить (в таблице topic)
+-- при нажатии добавить (в таблице topic) (+)
 INSERT INTO topic(title)
 VALUES (?);
 
--- при нажатии редактировать (в таблице topic)
+-- при нажатии редактировать (в таблице topic) (+)
 SELECT id,
        topic_id,
        title
 FROM subtopic
 WHERE topic_id = ?;
 
--- при нажатии удалить тему (набор) (в таблице subtopic)
+-- при нажатии удалить тему (набор) (в таблице subtopic) (+)
 DELETE FROM topic
 WHERE id = ?;
 
--- при нажатии добавить (в таблице подтема)
+-- при нажатии добавить (в таблице подтема) (+)
 INSERT INTO subtopic(topic_id, title)
 VALUES (?, ?);
 
--- при нажатии редактировать (в таблице подтема)
+-- при нажатии редактировать (в таблице подтема) (+)
 SELECT subtopic_id,
        question,
        answer,
@@ -67,21 +67,21 @@ SELECT subtopic_id,
 FROM card
 WHERE subtopic_id = ?;
 
--- при нажатии удалить подтему (набор) (в таблице карточки)
+-- при нажатии удалить подтему (набор) (в таблице карточки) (+)
 DELETE FROM subtopic
 WHERE id = ?;
 
--- при нажатии добавить (в таблице карточки)
+-- при нажатии добавить (в таблице карточки) (+)
 INSERT INTO card (subtopic_id, question, answer, learned)
 VALUES (?, ?, ?, ?);
 
--- при нажатии удалить карточку (в таблиц карточки)
+-- при нажатии удалить карточку (в таблиц карточки) (+)
 DELETE FROM card
 WHERE id = ?;
 
 -- ТРЕНИРОВКА
 
--- при нажатии на набор (переход на подтемы - таблица subtopic)
+-- при нажатии на набор (переход на подтемы - таблица subtopic) (+)
 SELECT subtopic.id                                           AS id,
        subtopic.topic_id                                     AS topic_id,
        subtopic.title                                        AS title,

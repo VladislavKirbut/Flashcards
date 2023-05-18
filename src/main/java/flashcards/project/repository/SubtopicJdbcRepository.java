@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SubtopicJdbcRepository implements SubtopicRepository {
     private final DataSource db;
@@ -84,6 +85,44 @@ public class SubtopicJdbcRepository implements SubtopicRepository {
         ) {
             statement.setInt(1, id);
             statement.executeUpdate();
+        } catch (SQLException exception) {
+            throw new RepositoryException(exception);
+        }
+    }
+
+    public Optional<Card> showCard(int id, int offset) {
+        String sql = """
+                SELECT id,
+                       subtopic_id,
+                       question,
+                       answer,
+                       learned
+                FROM card
+                WHERE subtopic_id = ? AND learned = false
+                ORDER BY id
+                OFFSET ? LIMIT 1;
+                """;
+
+        try (
+                Connection connection = db.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+        ) {
+            statement.setInt(1, id);
+            statement.setInt(2, offset);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            if (resultSet.next()) {
+                return Optional.of(new Card(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("subtopic_id"),
+                        resultSet.getString("question"),
+                        resultSet.getString("answer"),
+                        resultSet.getBoolean("learned")
+                ));
+            } else {
+                return Optional.empty();
+            }
+
         } catch (SQLException exception) {
             throw new RepositoryException(exception);
         }
