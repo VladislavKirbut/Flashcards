@@ -24,7 +24,7 @@ public class TopicJdbcRepository implements TopicRepository {
                 FROM topic;
                 """;
 
-        try(
+        try (
                 Connection connection = db.getConnection();
                 Statement statement = connection.createStatement();
         ) {
@@ -41,7 +41,6 @@ public class TopicJdbcRepository implements TopicRepository {
             throw new RepositoryException(exception);
         }
     }
-    // при нажатии в классе topic на тему (открываются подтемы)
     @Override
     public List<Subtopic> getSubtopicByTopicId(int topicId) {
         String sql = """
@@ -78,7 +77,6 @@ public class TopicJdbcRepository implements TopicRepository {
         }
     }
 
-    // добавляет в таблицу topic темы
     @Override
     public void addTopic(String topicTitle) {
         String sql = """
@@ -96,7 +94,6 @@ public class TopicJdbcRepository implements TopicRepository {
         }
     }
 
-    // при нажатии удалить набор в таблице subtopic
     @Override
     public void removeTopic(int id) {
         String sql = """

@@ -37,20 +37,20 @@ public class FlashcardsApp {
         System.out.print("""
                     TOPIC
                     - getAllTopicList
-                    - getSubtopicByTopicId  <topicId>
-                    - addTopic              <topicTitle>
-                    - removeTopic           <id>
+                    - getSubtopicByTopicId    <topicId>
+                    - addTopic                <topicTitle>
+                    - removeTopic             <id>
                     
                     SUBTOPIC
-                    - showOneCard           <subtopicId> <offset>
-                    - getCardsBySubtopicId  <subtopicId>
-                    - addSubtopic           <topicId> <subtopicTitle>
-                    - removeSubtopic        <id>
+                    - getCardsBySubtopicId    <subtopicId>
+                    - addSubtopic             <topicId> <subtopicTitle>
+                    - removeSubtopic          <id>
                     
                     CARD
-                    - addCard               <subtopicId> <question> <answer> <learned>
-                    - removeCard            <cardId>
-                    - updateCard            <id> <learned>
+                    - addCard                 <subtopicId> <question> <answer> <learned>
+                    - removeCard              <cardId>
+                    - updateCard              <id> <learned>
+                    - showOneNotLearnedCard   <subtopicId> <offset>
                     """);
 
         while (true) {
@@ -79,14 +79,6 @@ public class FlashcardsApp {
                     if (inputParts.length != REMOVE_TOPIC_COMMAND_SIZE) throw new IncorrectCommand();
                     topicrepository.removeTopic(Integer.parseInt(inputParts[1]));
                 }
-                case "showOneCard" -> {
-                    if (inputParts.length != SHOW_ONE_CARD_COMMAND_SIZE) throw new IncorrectCommand();
-                    String result = subtopicRepository.showOneCard(
-                            Integer.parseInt(inputParts[1]), Integer.parseInt(inputParts[2]))
-                            .map(card -> "" + card)
-                            .orElse("Cards absent");
-                    System.out.println(result);
-                }
                 case "getCardsBySubtopicId" -> {
                     if (inputParts.length != GET_CARDS_COMMAND_SIZE) throw new IncorrectCommand();
                     List<Card> cardsList = subtopicRepository.getCardsBySubtopicId(Integer.parseInt(inputParts[1]));
@@ -112,6 +104,14 @@ public class FlashcardsApp {
                 case "updateCard" -> {
                     if (inputParts.length != UPDATE_CARD_COMMAND_SIZE) throw new IncorrectCommand();
                     cardRepository.updateCard(Integer.parseInt(inputParts[1]), Boolean.parseBoolean(inputParts[2]));
+                }
+                case "showOneNotLearnedCard" -> {
+                    if (inputParts.length != SHOW_ONE_CARD_COMMAND_SIZE) throw new IncorrectCommand();
+                    String result = cardRepository.showOneNotLearnedCard(
+                                    Integer.parseInt(inputParts[1]), Integer.parseInt(inputParts[2]))
+                            .map(card -> "" + card)
+                            .orElse("Cards absent");
+                    System.out.println(result);
                 }
                 default -> throw new IncorrectCommand();
             }

@@ -1,11 +1,14 @@
 package flashcards.project.repository;
 
 import flashcards.project.exception.RepositoryException;
+import flashcards.project.model.Card;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class CardJdbcRepository implements CardRepository {
 
@@ -77,4 +80,42 @@ public class CardJdbcRepository implements CardRepository {
         }
     }
 
+    @Override
+    public Optional<Card> showOneNotLearnedCard(int subtopicId, int offset) {
+        String sql = """
+                SELECT id,
+                       subtopic_id,
+                       question,
+                       answer,
+                       learned
+                FROM card
+                WHERE subtopic_id = ? AND NOT learned;
+                ORDER BY id
+                OFFSET ? LIMIT 1;
+                """;
+
+        try (
+                Connection connection = db.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+        ) {
+            statement.setInt(1, subtopicId);
+            statement.setInt(2, offset);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return Optional.of(new Card(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("subtopic_id"),
+                        resultSet.getString("question"),
+                        resultSet.getString("answer"),
+                        resultSet.getBoolean("learned")
+                ));
+            } else {
+                return Optional.empty();
+            }
+
+        } catch (SQLException exception) {
+            throw new RepositoryException(exception);
+        }
+    }
 }
