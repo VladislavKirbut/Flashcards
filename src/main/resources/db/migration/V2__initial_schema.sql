@@ -84,7 +84,6 @@ DELETE FROM card
 WHERE id = ?;
 
 -- ТРЕНИРОВКА
-
 -- при нажатии на набор (переход на подтемы - таблица subtopic) (+)
 SELECT subtopic.id                                           AS id,
        subtopic.topic_id                                     AS topic_id,
@@ -103,16 +102,11 @@ SELECT id,
        answer,
        learned
 FROM card
-WHERE subtopic_id = ? AND learned = false
+WHERE subtopic_id = ? AND NOT learned
 ORDER BY id
 OFFSET ? LIMIT 1;
 
--- при нажатии знаю на определённой карточке
+-- при нажатии не знаю / знаю на определённой карточке
 UPDATE card
-SET learned = true
-WHERE id = ?;
-
--- при нажатии не знаю на определённой карточке
-UPDATE card
-SET learned = false
+SET learned = ?
 WHERE id = ?;

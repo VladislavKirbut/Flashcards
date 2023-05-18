@@ -99,7 +99,7 @@ public class SubtopicJdbcRepository implements SubtopicRepository {
                        answer,
                        learned
                 FROM card
-                WHERE subtopic_id = ? AND learned = false
+                WHERE subtopic_id = ? AND NOT learned;
                 ORDER BY id
                 OFFSET ? LIMIT 1;
                 """;
