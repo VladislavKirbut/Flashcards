@@ -103,12 +103,7 @@ WHERE subtopic_id = ? AND learned = false
 ORDER BY id
 OFFSET ? LIMIT 1;
 
--- при нажатии знаю на определённой карточке
+-- при нажатии знаю / не знаю на определённой карточке
 UPDATE card
-SET learned = true
-WHERE id = ?;
-
--- при нажатии не знаю на определённой карточке
-UPDATE card
-SET learned = false
+SET learned = ?
 WHERE id = ?;
