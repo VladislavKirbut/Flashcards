@@ -39,7 +39,7 @@ public class CardJdbcRepository implements CardRepository {
     }
 
     @Override
-    public void removeCard(int id) {
+    public void removeCard(int cardId) {
         String sql = """
                 DELETE FROM card
                 WHERE id = ?;
@@ -49,7 +49,7 @@ public class CardJdbcRepository implements CardRepository {
                 Connection connection = db.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql);
         ) {
-            statement.setInt(1, id);
+            statement.setInt(1, cardId);
             statement.executeUpdate();
         } catch (SQLException exception) {
             throw new RepositoryException(exception);

@@ -44,6 +44,10 @@ VALUES (1, 'Juice', 'Сок', false),
 INSERT INTO topic(title)
 VALUES (?);
 
+-- вывод всех topic
+SELECT id,
+       title
+FROM topic;
 -- при нажатии редактировать (в таблице topic) (+)
 SELECT id,
        topic_id,

@@ -17,4 +17,9 @@ public class Topic {
     public String getTitle() {
         return title;
     }
+
+    @Override
+    public String toString() {
+        return "%-3d %-10s".formatted(id, title);
+    }
 }

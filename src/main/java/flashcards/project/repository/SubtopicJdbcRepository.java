@@ -22,7 +22,8 @@ public class SubtopicJdbcRepository implements SubtopicRepository {
     @Override
     public List<Card> getCardsBySubtopicId(int subtopicId) {
         String sql = """
-                SELECT subtopic_id,
+                SELECT id,
+                       subtopic_id,
                        question,
                        answer,
                        learned
@@ -54,7 +55,7 @@ public class SubtopicJdbcRepository implements SubtopicRepository {
     }
 
     @Override
-    public void addSubtopic(int topicId, String title) {
+    public void addSubtopic(int topicId, String subtopicTitle) {
         String sql = """
                 INSERT INTO subtopic(topic_id, title)
                 VALUES (?, ?);
@@ -65,7 +66,7 @@ public class SubtopicJdbcRepository implements SubtopicRepository {
                 PreparedStatement statement = connection.prepareStatement(sql);
         ) {
             statement.setInt(1, topicId);
-            statement.setString(2, title);
+            statement.setString(2, subtopicTitle);
             statement.executeUpdate();
         } catch (SQLException exception) {
             throw new RepositoryException(exception);
@@ -90,7 +91,7 @@ public class SubtopicJdbcRepository implements SubtopicRepository {
         }
     }
 
-    public Optional<Card> showCard(int id, int offset) {
+    public Optional<Card> showOneCard(int subtopicId, int offset) {
         String sql = """
                 SELECT id,
                        subtopic_id,
@@ -107,10 +108,10 @@ public class SubtopicJdbcRepository implements SubtopicRepository {
                 Connection connection = db.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql);
         ) {
-            statement.setInt(1, id);
+            statement.setInt(1, subtopicId);
             statement.setInt(2, offset);
             ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
+
             if (resultSet.next()) {
                 return Optional.of(new Card(
                         resultSet.getInt("id"),

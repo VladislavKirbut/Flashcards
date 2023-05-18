@@ -2,12 +2,10 @@ package flashcards.project.repository;
 
 import flashcards.project.exception.RepositoryException;
 import flashcards.project.model.Subtopic;
+import flashcards.project.model.Topic;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +16,34 @@ public class TopicJdbcRepository implements TopicRepository {
         this.db = db;
     }
 
+    @Override
+    public List<Topic> getAllTopicList() {
+        String sql = """
+                SELECT id,
+                       title
+                FROM topic;
+                """;
+
+        try(
+                Connection connection = db.getConnection();
+                Statement statement = connection.createStatement();
+        ) {
+            ResultSet resultSet = statement.executeQuery(sql);
+            List<Topic> topicList = new ArrayList<>();
+            while (resultSet.next()) {
+                topicList.add(new Topic(
+                        resultSet.getInt("id"),
+                        resultSet.getString("title")
+                ));
+            }
+            return topicList;
+        } catch (SQLException exception) {
+            throw new RepositoryException(exception);
+        }
+    }
     // при нажатии в классе topic на тему (открываются подтемы)
     @Override
-    public List<Subtopic> getSubtopicByTopicId(int id) {
+    public List<Subtopic> getSubtopicByTopicId(int topicId) {
         String sql = """
                     SELECT subtopic.id                                           AS id,
                            subtopic.topic_id                                     AS topic_id,
@@ -35,7 +58,7 @@ public class TopicJdbcRepository implements TopicRepository {
                 Connection connection = db.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql);
         ) {
-            statement.setInt(1, id);
+            statement.setInt(1, topicId);
 
             ResultSet resultSet = statement.executeQuery();
             List<Subtopic> subtopicList = new ArrayList<>();
@@ -43,7 +66,9 @@ public class TopicJdbcRepository implements TopicRepository {
                 subtopicList.add(new Subtopic(
                         resultSet.getInt("id"),
                         resultSet.getInt("topic_id"),
-                        resultSet.getString("title")
+                        resultSet.getString("title"),
+                        resultSet.getInt("total_cards_count"),
+                        resultSet.getInt("learned_cards_count")
                 ));
             }
             return subtopicList;
@@ -55,7 +80,7 @@ public class TopicJdbcRepository implements TopicRepository {
 
     // добавляет в таблицу topic темы
     @Override
-    public void addTopic(String title) {
+    public void addTopic(String topicTitle) {
         String sql = """
                 INSERT INTO topic (title)
                 VALUES (?);
@@ -64,7 +89,7 @@ public class TopicJdbcRepository implements TopicRepository {
                 Connection connection = db.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql);
         ) {
-            statement.setString(1, title);
+            statement.setString(1, topicTitle);
             statement.executeUpdate();
         } catch (SQLException exception) {
             throw new RepositoryException(exception);
@@ -75,7 +100,7 @@ public class TopicJdbcRepository implements TopicRepository {
     @Override
     public void removeTopic(int id) {
         String sql = """
-                DELETE * FROM topic
+                DELETE FROM topic
                 WHERE id = ?;
                 """;
         try (

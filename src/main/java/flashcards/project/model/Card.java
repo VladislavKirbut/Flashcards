@@ -2,14 +2,14 @@ package flashcards.project.model;
 
 public class Card {
     private final int id;
-    private final int groupId;
+    private final int topicId;
     private final String question;
     private final String answer;
     private final boolean learned;
 
-    public Card(int id, int groupId, String question, String answer, boolean learned) {
+    public Card(int id, int topicid, String question, String answer, boolean learned) {
         this.id = id;
-        this.groupId = groupId;
+        this.topicId = topicid;
         this.question = question;
         this.answer = answer;
         this.learned = learned;
@@ -19,8 +19,8 @@ public class Card {
         return id;
     }
 
-    public int getGroupId() {
-        return groupId;
+    public int getTopicId() {
+        return topicId;
     }
 
     public String getQuestion() {
@@ -33,5 +33,10 @@ public class Card {
 
     public boolean isLearned() {
         return learned;
+    }
+
+    @Override
+    public String toString() {
+        return "%-3d %-5d %-10s %-10s %b".formatted(id, topicId, question, answer, learned);
     }
 }
