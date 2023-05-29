@@ -41,41 +41,6 @@ public class TopicJdbcRepository implements TopicRepository {
             throw new RepositoryException(exception);
         }
     }
-    @Override
-    public List<Subtopic> getSubtopicByTopicId(int topicId) {
-        String sql = """
-                    SELECT subtopic.id                                           AS id,
-                           subtopic.topic_id                                     AS topic_id,
-                           subtopic.title                                        AS title,
-                           count(c.id)                                           AS total_cards_count,
-                           count(c.learned) FILTER ( WHERE c.learned = true)     AS learned_cards_count
-                    FROM subtopic
-                            LEFT JOIN card c ON subtopic.id = c.subtopic_id
-                    WHERE topic_id = ?
-                    GROUP BY subtopic.id;""";
-        try (
-                Connection connection = db.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
-        ) {
-            statement.setInt(1, topicId);
-
-            ResultSet resultSet = statement.executeQuery();
-            List<Subtopic> subtopicList = new ArrayList<>();
-            while(resultSet.next()) {
-                subtopicList.add(new Subtopic(
-                        resultSet.getInt("id"),
-                        resultSet.getInt("topic_id"),
-                        resultSet.getString("title"),
-                        resultSet.getInt("total_cards_count"),
-                        resultSet.getInt("learned_cards_count")
-                ));
-            }
-            return subtopicList;
-
-        } catch (SQLException exception) {
-            throw new RepositoryException(exception);
-        }
-    }
 
     @Override
     public void addTopic(String topicTitle) {
@@ -95,7 +60,7 @@ public class TopicJdbcRepository implements TopicRepository {
     }
 
     @Override
-    public void removeTopic(int id) {
+    public void removeTopicById(int id) {
         String sql = """
                 DELETE FROM topic
                 WHERE id = ?;

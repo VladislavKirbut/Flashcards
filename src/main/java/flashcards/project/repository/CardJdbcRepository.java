@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class CardJdbcRepository implements CardRepository {
@@ -16,6 +18,40 @@ public class CardJdbcRepository implements CardRepository {
 
     public CardJdbcRepository(DataSource db) {
         this.db = db;
+    }
+    @Override
+    public List<Card> getCardsBySubtopicId(int subtopicId) {
+        String sql = """
+                SELECT id,
+                       subtopic_id,
+                       question,
+                       answer,
+                       learned
+                FROM card
+                WHERE subtopic_id = ?;
+                """;
+        try (
+                Connection connection = db.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+        ) {
+            statement.setInt(1, subtopicId);
+
+            ResultSet resultSet = statement.executeQuery();
+            List<Card> cardsList = new ArrayList<>();
+            while (resultSet.next()) {
+                cardsList.add(new Card(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("subtopic_id"),
+                        resultSet.getString("question"),
+                        resultSet.getString("answer"),
+                        resultSet.getBoolean("learned")
+                ));
+            }
+            return cardsList;
+
+        } catch (SQLException exception) {
+            throw new RepositoryException(exception);
+        }
     }
 
     @Override

@@ -68,7 +68,7 @@ public class FlashcardsApp {
                         if (inputParts.length != GET_SUBTOPIC_COMMAND_SIZE) throw new IncorrectCommand();
 
                         int topicId = Integer.parseInt(inputParts[1]);
-                        List<Subtopic> subtopicList = topicrepository.getSubtopicByTopicId(topicId);
+                        List<Subtopic> subtopicList = subtopicRepository.getSubtopicByTopicId(topicId);
                         printList(subtopicList);
                     }
                     case "addTopic" -> {
@@ -77,20 +77,20 @@ public class FlashcardsApp {
                     }
                     case "removeTopic" -> {
                         if (inputParts.length != REMOVE_TOPIC_COMMAND_SIZE) throw new IncorrectCommand();
-                        topicrepository.removeTopic(Integer.parseInt(inputParts[1]));
+                        topicrepository.removeTopicById(Integer.parseInt(inputParts[1]));
                     }
                     case "getCardsBySubtopicId" -> {
                         if (inputParts.length != GET_CARDS_COMMAND_SIZE) throw new IncorrectCommand();
-                        List<Card> cardsList = subtopicRepository.getCardsBySubtopicId(Integer.parseInt(inputParts[1]));
+                        List<Card> cardsList = cardRepository.getCardsBySubtopicId(Integer.parseInt(inputParts[1]));
                         printList(cardsList);
                     }
                     case "addSubtopic" -> {
                         if (inputParts.length != ADD_SUBTOPIC_COMMAND_SIZE) throw new IncorrectCommand();
-                        subtopicRepository.addSubtopic(Integer.parseInt(inputParts[1]), inputParts[2]);
+                        subtopicRepository.addSubtopicBySubtopicTitle(Integer.parseInt(inputParts[1]), inputParts[2]);
                     }
                     case "removeSubtopic" -> {
                         if (inputParts.length != REMOVE_SUBTOPIC_COMMAND_SIZE) throw new IncorrectCommand();
-                        subtopicRepository.removeSubtopic(Integer.parseInt(inputParts[1]));
+                        subtopicRepository.removeSubtopicById(Integer.parseInt(inputParts[1]));
                     }
                     case "addCard" -> {
                         if (inputParts.length != ADD_CARD_COMMAND_SIZE) throw new IncorrectCommand();

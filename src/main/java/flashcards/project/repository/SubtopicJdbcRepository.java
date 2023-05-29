@@ -2,6 +2,7 @@ package flashcards.project.repository;
 
 import flashcards.project.exception.RepositoryException;
 import flashcards.project.model.Card;
+import flashcards.project.model.Subtopic;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -18,36 +19,36 @@ public class SubtopicJdbcRepository implements SubtopicRepository {
     public SubtopicJdbcRepository(DataSource db) {
         this.db = db;
     }
-
     @Override
-    public List<Card> getCardsBySubtopicId(int subtopicId) {
+    public List<Subtopic> getSubtopicByTopicId(int topicId) {
         String sql = """
-                SELECT id,
-                       subtopic_id,
-                       question,
-                       answer,
-                       learned
-                FROM card
-                WHERE subtopic_id = ?;
-                """;
+                    SELECT subtopic.id                                           AS id,
+                           subtopic.topic_id                                     AS topic_id,
+                           subtopic.title                                        AS title,
+                           count(c.id)                                           AS total_cards_count,
+                           count(c.learned) FILTER ( WHERE c.learned = true)     AS learned_cards_count
+                    FROM subtopic
+                            LEFT JOIN card c ON subtopic.id = c.subtopic_id
+                    WHERE topic_id = ?
+                    GROUP BY subtopic.id;""";
         try (
                 Connection connection = db.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql);
         ) {
-            statement.setInt(1, subtopicId);
+            statement.setInt(1, topicId);
 
             ResultSet resultSet = statement.executeQuery();
-            List<Card> cardsList = new ArrayList<>();
-            while (resultSet.next()) {
-                cardsList.add(new Card(
+            List<Subtopic> subtopicList = new ArrayList<>();
+            while(resultSet.next()) {
+                subtopicList.add(new Subtopic(
                         resultSet.getInt("id"),
-                        resultSet.getInt("subtopic_id"),
-                        resultSet.getString("question"),
-                        resultSet.getString("answer"),
-                        resultSet.getBoolean("learned")
+                        resultSet.getInt("topic_id"),
+                        resultSet.getString("title"),
+                        resultSet.getInt("total_cards_count"),
+                        resultSet.getInt("learned_cards_count")
                 ));
             }
-            return cardsList;
+            return subtopicList;
 
         } catch (SQLException exception) {
             throw new RepositoryException(exception);
@@ -55,7 +56,7 @@ public class SubtopicJdbcRepository implements SubtopicRepository {
     }
 
     @Override
-    public void addSubtopic(int topicId, String subtopicTitle) {
+    public void addSubtopicBySubtopicTitle(int topicId, String subtopicTitle) {
         String sql = """
                 INSERT INTO subtopic(topic_id, title)
                 VALUES (?, ?);
@@ -74,7 +75,7 @@ public class SubtopicJdbcRepository implements SubtopicRepository {
     }
 
     @Override
-    public void removeSubtopic(int id) {
+    public void removeSubtopicById(int id) {
         String sql = """
                 DELETE FROM subtopic
                 WHERE id = ?;
