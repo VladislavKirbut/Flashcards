@@ -1,26 +1,38 @@
 package flashcards.project.service;
 
+import flashcards.project.exception.IncorrectParameters;
 import flashcards.project.model.Card;
 import flashcards.project.repository.CardRepository;
+import flashcards.project.repository.SubtopicRepository;
+
+import java.util.Optional;
 
 public class TrainingModeService implements TrainingService {
 
-    private final CardRepository repository;
+    private static final boolean LEARNED = true;
+    private final CardRepository cardRepository;
+    private final SubtopicRepository subtopicRepository;
 
-    public TrainingModeService(CardRepository repository) {
-        this.repository = repository;
+    public TrainingModeService(CardRepository cardRepository, SubtopicRepository subtopicRepository) {
+        this.cardRepository = cardRepository;
+        this.subtopicRepository = subtopicRepository;
     }
 
     @Override
-    public Card getOneNotLearnedCard(int id, int offset) {
-        if (repository.showOneNotLearnedCard(id, offset).isPresent()) {
-            return repository.showOneNotLearnedCard(id, offset).get();
-        } else throw new RuntimeException();
+    public Optional<Card> getOneNotLearnedCard(int subtopicId, int offset) {
+        validateSubtopicExists(subtopicId);
+
+        return cardRepository.showOneNotLearnedCard(subtopicId, offset);
     }
 
-    @Override
-    public Card clickKnow(int id, int offset, boolean learned) {
-        repository.updateCard(id, learned);
-        return getOneNotLearnedCard(id, offset);
+  @Override
+    public Optional<Card> clickKnow(int cardId, int offset) {
+        cardRepository.updateCard(cardId, LEARNED);
+        return getOneNotLearnedCard(cardId, offset);
+    }
+
+    private void validateSubtopicExists(int subtopicId) {
+        if (subtopicRepository.existsBySubtopicId(subtopicId))
+            throw new IncorrectParameters("Subtopic id not found");
     }
 }

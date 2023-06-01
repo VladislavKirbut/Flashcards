@@ -91,4 +91,25 @@ public class SubtopicJdbcRepository implements SubtopicRepository {
             throw new RepositoryException(exception);
         }
     }
+
+    @Override
+    public boolean existsBySubtopicId(int subtopicId) {
+        String sql = """
+                SELECT TRUE
+                FROM subtopic
+                WHERE id = ?;
+                """;
+
+        try (
+                Connection connection = db.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+            ) {
+
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet.next();
+
+        } catch (SQLException exception) {
+            throw new RepositoryException(exception);
+        }
+    }
 }

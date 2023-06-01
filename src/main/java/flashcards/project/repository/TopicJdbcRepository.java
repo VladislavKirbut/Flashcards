@@ -75,4 +75,23 @@ public class TopicJdbcRepository implements TopicRepository {
             throw new RepositoryException(exception);
         }
     }
+    @Override
+    public boolean isExistsByTopicId(int topicId) {
+        String sql = """
+                SELECT TRUE
+                FROM topic
+                WHERE id = ?;
+                """;
+
+        try (
+                Connection connection = db.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+        ) {
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet.next();
+
+        } catch (SQLException exception) {
+            throw new RepositoryException(exception);
+        }
+    }
 }

@@ -8,26 +8,27 @@ import java.util.List;
 
 public class TopicServiceImpl implements TopicService {
 
-    private final TopicRepository repository;
+    private final TopicRepository topicRepository;
 
-    public TopicServiceImpl(TopicRepository repository) {
-        this.repository = repository;
+    public TopicServiceImpl(TopicRepository topicRepository) {
+        this.topicRepository = topicRepository;
     }
 
     @Override
     public List<Topic> showTopicList() {
-        return repository.getAllTopicList();
+        return topicRepository.getAllTopicList();
     }
 
     @Override
     public void addTheme(String topicTitle) {
         if (!topicTitle.isEmpty())
-            repository.addTopic(topicTitle);
-        else throw new IncorrectParameters();
+            topicRepository.addTopic(topicTitle);
+        else throw new IncorrectParameters("Topic title is invalid");
     }
 
     @Override
     public void removeTopic(int topicId) {
-        repository.removeTopicById(topicId);
+        topicRepository.isExistsByTopicId(topicId);
+        topicRepository.removeTopicById(topicId);
     }
 }

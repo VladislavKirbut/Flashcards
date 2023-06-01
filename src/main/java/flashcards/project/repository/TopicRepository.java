@@ -10,4 +10,5 @@ public interface TopicRepository {
     void addTopic(String topicTitle);
 
     void removeTopicById(int id);
+    boolean isExistsByTopicId(int topicId);
 }

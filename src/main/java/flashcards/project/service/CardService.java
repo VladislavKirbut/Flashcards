@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface CardService {
     List<Card> getCards(int subtopicId);
-    void addFlashcard(int subtopicId, String question, String answer, boolean learned);
+    void addFlashcard(int subtopicId, String question, String answer);
     void removeFlashcard(int id);
 }

@@ -12,4 +12,6 @@ public interface SubtopicRepository {
     void addSubtopicBySubtopicTitle(int topicId, String subtopicTitle);
 
     void removeSubtopicById(int id);
+
+    boolean existsBySubtopicId(int subtopicId);
 }

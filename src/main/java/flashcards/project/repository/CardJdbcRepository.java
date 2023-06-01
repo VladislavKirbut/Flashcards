@@ -19,6 +19,7 @@ public class CardJdbcRepository implements CardRepository {
     public CardJdbcRepository(DataSource db) {
         this.db = db;
     }
+
     @Override
     public List<Card> getCardsBySubtopicId(int subtopicId) {
         String sql = """
@@ -149,6 +150,26 @@ public class CardJdbcRepository implements CardRepository {
             } else {
                 return Optional.empty();
             }
+
+        } catch (SQLException exception) {
+            throw new RepositoryException(exception);
+        }
+    }
+
+    @Override
+    public boolean existsById(int id) {
+        String sql = """
+                SELECT TRUE
+                FROM card
+                WHERE id = ?
+                """;
+
+        try (
+                Connection connection = db.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+        ) {
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet.next();
 
         } catch (SQLException exception) {
             throw new RepositoryException(exception);
