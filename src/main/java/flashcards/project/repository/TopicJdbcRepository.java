@@ -87,6 +87,7 @@ public class TopicJdbcRepository implements TopicRepository {
                 Connection connection = db.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql);
         ) {
+            statement.setInt(1, topicId);
             ResultSet resultSet = statement.executeQuery();
             return resultSet.next();
 

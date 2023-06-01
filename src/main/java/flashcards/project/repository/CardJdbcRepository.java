@@ -157,7 +157,7 @@ public class CardJdbcRepository implements CardRepository {
     }
 
     @Override
-    public boolean existsById(int id) {
+    public boolean existsById(int cardId) {
         String sql = """
                 SELECT TRUE
                 FROM card
@@ -168,6 +168,7 @@ public class CardJdbcRepository implements CardRepository {
                 Connection connection = db.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql);
         ) {
+            statement.setInt(1, cardId);
             ResultSet resultSet = statement.executeQuery();
             return resultSet.next();
 

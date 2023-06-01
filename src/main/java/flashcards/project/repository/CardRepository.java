@@ -11,5 +11,5 @@ public interface CardRepository {
     void removeCard(int id);
     void updateCard(int id, boolean learned);
     Optional<Card> showOneNotLearnedCard(int subtopicId, int offset);
-    boolean existsById(int id);
+    boolean existsById(int cardId);
 }
