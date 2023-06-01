@@ -104,7 +104,7 @@ public class SubtopicJdbcRepository implements SubtopicRepository {
                 Connection connection = db.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql);
             ) {
-
+            statement.setInt(1, subtopicId);
             ResultSet resultSet = statement.executeQuery();
             return resultSet.next();
 
