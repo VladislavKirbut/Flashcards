@@ -7,9 +7,8 @@ import java.util.List;
 
 public interface TopicRepository {
     List<Topic> getAllTopicList();
-    List<Subtopic> getSubtopicByTopicId(int topicId);
-
     void addTopic(String topicTitle);
 
-    void removeTopic(int id);
+    void removeTopicById(int id);
+    boolean isExistsByTopicId(int topicId);
 }

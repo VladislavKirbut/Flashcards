@@ -1,13 +1,17 @@
 package flashcards.project.repository;
 
 import flashcards.project.model.Card;
+import flashcards.project.model.Subtopic;
+
 import java.util.List;
 
 public interface SubtopicRepository {
 
-    List<Card> getCardsBySubtopicId(int subtopicId);
+    List<Subtopic> getSubtopicByTopicId(int topicId);
 
-    void addSubtopic(int topicId, String subtopicTitle);
+    void addSubtopicBySubtopicTitle(int topicId, String subtopicTitle);
 
-    void removeSubtopic(int id);
+    void removeSubtopicById(int id);
+
+    boolean existsBySubtopicId(int subtopicId);
 }
