@@ -32,7 +32,7 @@ public class TrainingModeService implements TrainingService {
     }
 
     private void validateSubtopicExists(int subtopicId) {
-        if (subtopicRepository.existsBySubtopicId(subtopicId))
+        if (!subtopicRepository.existsBySubtopicId(subtopicId))
             throw new IncorrectParameters("Subtopic id not found");
     }
 }
