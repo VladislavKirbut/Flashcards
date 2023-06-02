@@ -118,7 +118,7 @@ public class CardJdbcRepository implements CardRepository {
     }
 
     @Override
-    public Optional<Card> showOneNotLearnedCard(int subtopicId, int offset) {
+    public Optional<Card> showOneNotLearnedCard(int subtopicId, int offsetValue) {
         String sql = """
                 SELECT id,
                        subtopic_id,
@@ -136,7 +136,7 @@ public class CardJdbcRepository implements CardRepository {
                 PreparedStatement statement = connection.prepareStatement(sql);
         ) {
             statement.setInt(1, subtopicId);
-            statement.setInt(2, offset);
+            statement.setInt(2, offsetValue);
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
