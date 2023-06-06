@@ -14,20 +14,21 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import static flashcards.project.controller.SubtopicPage.PATH;
 import static flashcards.project.util.ServletsUtils.getResponse;
 
-@WebServlet(urlPatterns = "/topicPage/subtopicPage")
+@WebServlet(urlPatterns = PATH)
 public class SubtopicPage extends HttpServlet {
+    public static final String PATH = "/topicPage/subtopicPage";
     private SubtopicService subtopicService;
 
     public void init() {
         ServletContext context = getServletContext();
-        subtopicService = (SubtopicService) context.getAttribute("subtopicService");
+        subtopicService = (SubtopicService) context.getAttribute("SubtopicService");
     }
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         int topicId = Integer.parseInt(req.getParameter("topicId"));
-
         List<Subtopic> subtopicList = subtopicService.getSubtopicList(topicId);
         String responseText = getResponse(subtopicList);
         res.setContentType("text/plain");

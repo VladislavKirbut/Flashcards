@@ -12,15 +12,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 @WebServlet(urlPatterns = "/topicPage/subtopicPage/trainingPage")
 public class TrainingPage extends HttpServlet {
     private TrainingService trainingService;
+    private static final String CARD_IS_MISSING = "Card is missing";
 
     public void init() {
         ServletContext context = getServletContext();
-        trainingService = (TrainingService) context.getAttribute("trainingService");
+        trainingService = (TrainingService) context.getAttribute("TrainingService");
     }
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -29,14 +29,18 @@ public class TrainingPage extends HttpServlet {
 
         String responseText = trainingService.getOneNotLearnedCard(subtopicId, offset)
                 .map(Card::toString)
-                .orElse("Cards is absent. You learned all cards");
+                .orElse(CARD_IS_MISSING);
+
 
         res.setContentType("text/plain");
         res.setCharacterEncoding(StandardCharsets.UTF_8.name());
         res.setStatus(HttpServletResponse.SC_OK);
 
         try (Writer writer = res.getWriter()) {
-            writer.write(responseText);
+            if (responseText.equals(CARD_IS_MISSING)) {
+                int topicId = Integer.parseInt(req.getParameter("topicId"));
+                res.sendRedirect(req.getContextPath() + SubtopicPage.PATH + "?topicId=" + topicId);
+            } else writer.write(responseText);
         }
     }
 }

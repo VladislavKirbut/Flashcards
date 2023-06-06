@@ -22,7 +22,7 @@ public class CardPage extends HttpServlet {
 
     public void init() {
         ServletContext context = getServletContext();
-        cardService = (CardService) context.getAttribute("cardService");
+        cardService = (CardService) context.getAttribute("CardService");
     }
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {

@@ -126,7 +126,7 @@ public class CardJdbcRepository implements CardRepository {
                        answer,
                        learned
                 FROM card
-                WHERE subtopic_id = ? AND NOT learned;
+                WHERE subtopic_id = ? AND NOT learned
                 ORDER BY id
                 OFFSET ? LIMIT 1;
                 """;

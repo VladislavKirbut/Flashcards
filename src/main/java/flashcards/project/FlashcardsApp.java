@@ -12,6 +12,15 @@ import jakarta.servlet.annotation.WebListener;
 @WebListener
 public class FlashcardsApp implements ServletContextListener {
 
+    private static final String HIKARI_DATA_SOURCE = "HikariDataSource";
+    private static final String TOPIC_REPOSITORY = "TopicRepository";
+    private static final String SUBTOPIC_REPOSITORY = "SubtopicRepository";
+    private static final String CARD_REPOSITORY = "CardRepository";
+    private static final String CARD_SERVICE = "CardService";
+    private static final String SUBTOPIC_SERVICE = "SubtopicService";
+    private static final String TOPIC_SERVICE = "TopicService";
+    private static final String TRAINING_SERVICE = "TrainingService";
+
     @Override
     public void contextInitialized(ServletContextEvent event) {
         HikariConfig config = new HikariConfig();
@@ -30,14 +39,14 @@ public class FlashcardsApp implements ServletContextListener {
         TrainingService trainingService = new TrainingModeService(cardRepository, subtopicRepository);
 
         ServletContext context = event.getServletContext();
-        context.setAttribute("HikariDataSource", database);
-        context.setAttribute("topicRepository", topicRepository);
-        context.setAttribute("subtopicRepository", subtopicRepository);
-        context.setAttribute("cardRepository", cardRepository);
-        context.setAttribute("cardService", cardService);
-        context.setAttribute("subtopicService", subtopicService);
-        context.setAttribute("topicService", topicService);
-        context.setAttribute("trainingService", trainingService);
+        context.setAttribute(HIKARI_DATA_SOURCE, database);
+        context.setAttribute(TOPIC_REPOSITORY, topicRepository);
+        context.setAttribute(SUBTOPIC_REPOSITORY, subtopicRepository);
+        context.setAttribute(CARD_REPOSITORY, cardRepository);
+        context.setAttribute(CARD_SERVICE, cardService);
+        context.setAttribute(SUBTOPIC_SERVICE, subtopicService);
+        context.setAttribute(TOPIC_SERVICE, topicService);
+        context.setAttribute(TRAINING_SERVICE, trainingService);
     }
     @Override
     public void contextDestroyed(ServletContextEvent event) {

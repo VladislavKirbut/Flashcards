@@ -17,22 +17,23 @@ import static flashcards.project.util.ServletsUtils.getResponse;
 
 @WebServlet(urlPatterns = "/topicPage")
 public class TopicPage extends HttpServlet {
+    public static final String PATH = "/topicPage";
 
     private TopicService topicService;
 
     public void init() {
         ServletContext context = getServletContext();
-        topicService = (TopicService) context.getAttribute("topicService");
+        topicService = (TopicService) context.getAttribute("TopicService");
     }
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         List<Topic> topicList = topicService.showTopicList();
         String responseText = getResponse(topicList);
 
-
         res.setContentType("text/plain");
         res.setCharacterEncoding(StandardCharsets.UTF_8.name());
         res.setStatus(HttpServletResponse.SC_OK);
+
         try (Writer writer = res.getWriter()) {
             writer.write(responseText);
         }
