@@ -2,6 +2,7 @@ package flashcards.project.controller;
 
 import flashcards.project.model.Subtopic;
 import flashcards.project.service.SubtopicService;
+import flashcards.project.service.TopicService;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,12 +22,16 @@ import static flashcards.project.util.ServletsUtils.getResponse;
 public class SubtopicPage extends HttpServlet {
     public static final String PATH = "/topicPage/subtopicPage";
     private SubtopicService subtopicService;
+    private TopicService topicService;
 
+    @Override
     public void init() {
         ServletContext context = getServletContext();
         subtopicService = (SubtopicService) context.getAttribute("SubtopicService");
+        topicService = (TopicService) context.getAttribute("TopicService");
     }
 
+    @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         int topicId = Integer.parseInt(req.getParameter("topicId"));
         List<Subtopic> subtopicList = subtopicService.getSubtopicList(topicId);
@@ -38,5 +43,11 @@ public class SubtopicPage extends HttpServlet {
         try (Writer writer = res.getWriter()) {
             writer.write(responseText);
         }
+    }
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int topicId = Integer.parseInt(request.getParameter("deleteTopicById"));
+        topicService.removeTopic(topicId);
+        response.sendRedirect(request.getContextPath() + TopicPage.PATH);
     }
 }

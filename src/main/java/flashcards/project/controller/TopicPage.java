@@ -21,11 +21,12 @@ public class TopicPage extends HttpServlet {
 
     private TopicService topicService;
 
+    @Override
     public void init() {
         ServletContext context = getServletContext();
         topicService = (TopicService) context.getAttribute("TopicService");
     }
-
+    @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         List<Topic> topicList = topicService.showTopicList();
         String responseText = getResponse(topicList);
@@ -37,5 +38,11 @@ public class TopicPage extends HttpServlet {
         try (Writer writer = res.getWriter()) {
             writer.write(responseText);
         }
+    }
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String newTopic = request.getParameter("newTopic");
+        topicService.addTheme(newTopic);
+        response.sendRedirect(request.getContextPath() + PATH);
     }
 }

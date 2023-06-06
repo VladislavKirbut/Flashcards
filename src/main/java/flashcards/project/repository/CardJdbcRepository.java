@@ -68,7 +68,7 @@ public class CardJdbcRepository implements CardRepository {
         ) {
             statement.setInt(1, subtopicId);
             statement.setString(2, question);
-            statement.setString(3, question);
+            statement.setString(3, answer);
             statement.setBoolean(4, learned);
 
             statement.executeUpdate();

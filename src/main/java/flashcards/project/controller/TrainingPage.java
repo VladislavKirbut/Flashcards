@@ -18,11 +18,13 @@ public class TrainingPage extends HttpServlet {
     private TrainingService trainingService;
     private static final String CARD_IS_MISSING = "Card is missing";
 
+    @Override
     public void init() {
         ServletContext context = getServletContext();
         trainingService = (TrainingService) context.getAttribute("TrainingService");
     }
 
+    @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         int subtopicId = Integer.parseInt(req.getParameter("subtopicId"));
         int offset = Integer.parseInt(req.getParameter("offsetValue"));
