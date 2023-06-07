@@ -68,7 +68,7 @@ public class CardJdbcRepository implements CardRepository {
         ) {
             statement.setInt(1, subtopicId);
             statement.setString(2, question);
-            statement.setString(3, question);
+            statement.setString(3, answer);
             statement.setBoolean(4, learned);
 
             statement.executeUpdate();
@@ -118,7 +118,7 @@ public class CardJdbcRepository implements CardRepository {
     }
 
     @Override
-    public Optional<Card> showOneNotLearnedCard(int subtopicId, int offset) {
+    public Optional<Card> showOneNotLearnedCard(int subtopicId, int offsetValue) {
         String sql = """
                 SELECT id,
                        subtopic_id,
@@ -126,7 +126,7 @@ public class CardJdbcRepository implements CardRepository {
                        answer,
                        learned
                 FROM card
-                WHERE subtopic_id = ? AND NOT learned;
+                WHERE subtopic_id = ? AND NOT learned
                 ORDER BY id
                 OFFSET ? LIMIT 1;
                 """;
@@ -136,7 +136,7 @@ public class CardJdbcRepository implements CardRepository {
                 PreparedStatement statement = connection.prepareStatement(sql);
         ) {
             statement.setInt(1, subtopicId);
-            statement.setInt(2, offset);
+            statement.setInt(2, offsetValue);
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
