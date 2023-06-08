@@ -24,8 +24,11 @@ public class AddSubtopicPage extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String subtopicName = request.getParameter("newSubtopicName");
-        int topicId = Integer.parseInt(request.getParameter("topicId"));
-        subtopicService.addSubtopic(topicId, subtopicName);
-        response.sendRedirect(request.getContextPath() + SubtopicPage.PATH + "?topicId=" + topicId);
+
+        if (subtopicName != null) {
+            int topicId = Integer.parseInt(request.getParameter("topicId"));
+            subtopicService.addSubtopic(topicId, subtopicName);
+            response.sendRedirect(request.getContextPath() + SubtopicPage.PATH + "?topicId=" + topicId);
+        } else response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
 }

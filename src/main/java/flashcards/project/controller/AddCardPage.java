@@ -22,12 +22,15 @@ public class AddCardPage extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String cardQuestion = request.getParameter("newCardQuestion");
-        String cardAnswer = request.getParameter("newCardAnswer");
-        int subtopicId = Integer.parseInt(request.getParameter("subtopicId"));
-        int topicId = Integer.parseInt(request.getParameter("topicId"));
+        String question = request.getParameter("newCardQuestion");
+        String answer = request.getParameter("newCardAnswer");
 
-        cardService.addFlashcard(subtopicId, cardQuestion, cardAnswer);
-        response.sendRedirect(request.getContextPath() + CardPage.PATH + "?topicId=" + topicId + "&subtopicId=" + subtopicId);
+        if (question != null && answer != null) {
+            int subtopicId = Integer.parseInt(request.getParameter("subtopicId"));
+            int topicId = Integer.parseInt(request.getParameter("topicId"));
+
+            cardService.addFlashcard(subtopicId, question, answer);
+            response.sendRedirect(request.getContextPath() + CardPage.PATH + "?topicId=" + topicId + "&subtopicId=" + subtopicId);
+        } else response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
 }

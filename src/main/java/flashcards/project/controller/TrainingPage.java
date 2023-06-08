@@ -13,9 +13,12 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 
-@WebServlet(urlPatterns = "/topicPage/subtopicPage/trainingPage")
+import static flashcards.project.controller.TrainingPage.PATH;
+
+@WebServlet(urlPatterns = PATH)
 public class TrainingPage extends HttpServlet {
     private TrainingService trainingService;
+    public static final String PATH = "/topicPage/subtopicPage/trainingPage";
     private static final String CARD_IS_MISSING = "Card is missing";
 
     @Override

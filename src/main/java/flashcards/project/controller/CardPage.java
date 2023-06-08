@@ -15,9 +15,10 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import static flashcards.project.controller.CardPage.PATH;
 import static flashcards.project.util.ServletsUtils.getResponse;
 
-@WebServlet(urlPatterns = "/topicPage/subtopicPage/cardEditPage")
+@WebServlet(urlPatterns = PATH)
 public class CardPage extends HttpServlet {
     public static final String PATH = "/topicPage/subtopicPage/cardEditPage";
     private CardService cardService;

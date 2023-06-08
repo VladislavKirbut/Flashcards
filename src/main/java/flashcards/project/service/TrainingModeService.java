@@ -26,9 +26,8 @@ public class TrainingModeService implements TrainingService {
     }
 
   @Override
-    public Optional<Card> clickKnow(int cardId, int offset) {
+    public void clickKnow(int cardId) {
         cardRepository.updateCard(cardId, LEARNED);
-        return getOneNotLearnedCard(cardId, offset);
     }
 
     private void validateSubtopicExists(int subtopicId) {
