@@ -6,5 +6,7 @@ import java.util.Optional;
 
 public interface TrainingService {
     Optional<Card> getOneNotLearnedCard(int id, int offset);
-    Optional<Card> clickKnow(int cardId, int offset);
+    void clickKnow(int cardId);
+
+    Optional<Card> getFirst(int subtopicId);
 }
