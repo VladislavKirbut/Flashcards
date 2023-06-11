@@ -22,13 +22,10 @@ public class UpdateCardPage extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int cardId = Integer.parseInt(request.getParameter("cardId"));
-        int offsetValue = Integer.parseInt(request.getParameter("offsetValue"));
         int topicId = Integer.parseInt(request.getParameter("topicId"));
         int subtopicId = Integer.parseInt(request.getParameter("subtopicId"));
 
-
-            trainingService.clickKnow(cardId);
-            response.sendRedirect(request.getContextPath() + TrainingPage.PATH + "?topicId=" + topicId + "&subtopicId=" + subtopicId +
-                    "&offsetValue=" + (offsetValue));
+        trainingService.clickKnow(cardId);
+        response.sendRedirect(request.getContextPath() + TrainingPage.PATH + "?topicId=" + topicId + "&subtopicId=" + subtopicId + "&previousCardId=" + cardId);
     }
 }

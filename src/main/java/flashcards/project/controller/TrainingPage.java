@@ -30,12 +30,11 @@ public class TrainingPage extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         int subtopicId = Integer.parseInt(req.getParameter("subtopicId"));
-        int offset = Integer.parseInt(req.getParameter("offsetValue"));
+        int previousCard = Integer.parseInt(req.getParameter("previousCard"));
 
-        String responseText = trainingService.getOneNotLearnedCard(subtopicId, offset)
+        String responseText = trainingService.getOneNotLearnedCard(subtopicId, previousCard)
                 .map(Card::toString)
                 .orElse(CARD_IS_MISSING);
-
 
         res.setContentType("text/plain");
         res.setCharacterEncoding(StandardCharsets.UTF_8.name());

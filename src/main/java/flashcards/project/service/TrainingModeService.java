@@ -1,5 +1,9 @@
 package flashcards.project.service;
 
+import flashcards.project.controller.SubtopicPage;
+import flashcards.project.controller.TrainingFirstCard;
+import flashcards.project.controller.TrainingPage;
+import flashcards.project.exception.BusinessException;
 import flashcards.project.exception.IncorrectParameters;
 import flashcards.project.model.Card;
 import flashcards.project.repository.CardRepository;
@@ -19,15 +23,21 @@ public class TrainingModeService implements TrainingService {
     }
 
     @Override
-    public Optional<Card> getOneNotLearnedCard(int subtopicId, int offset) {
-        validateSubtopicExists(subtopicId);
+    public Optional<Card> getFirst(int subtopicId) {
+        return cardRepository.showOneNotLearnedCard(subtopicId,0);
+    }
 
-        return cardRepository.showOneNotLearnedCard(subtopicId, offset);
+    @Override
+    public Optional<Card> getOneNotLearnedCard(int subtopicId, int previousCard) {
+        validateSubtopicExists(subtopicId);
+        return cardRepository.showOneNotLearnedCard(subtopicId, previousCard);
     }
 
   @Override
     public void clickKnow(int cardId) {
-        cardRepository.updateCard(cardId, LEARNED);
+        boolean exists = cardRepository.updateCard(cardId, LEARNED);
+        if (!exists)
+            throw new BusinessException("Card is missing");
     }
 
     private void validateSubtopicExists(int subtopicId) {
