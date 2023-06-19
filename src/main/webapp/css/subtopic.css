@@ -3,6 +3,13 @@
     padding: 0;
 }
 
+span {
+    display: inline-block;
+    margin-left: 10px;
+    color: #ffffff;
+    transition: 0.9s;
+}
+
 input {
     border:none;
     border-radius: 5px;
@@ -56,10 +63,6 @@ input:hover {
     font-weight: normal;
 }
 
-.row {
-    height: 100px;
-}
-
 .subtopic-cards {
     margin-top: 30px;
 }
@@ -72,7 +75,7 @@ input:hover {
 
 .subtopic-form {
     text-align: center;
-    padding-bottom: 100px;
+    padding-bottom: 50px;
 }
 
 .col:hover {
@@ -112,4 +115,8 @@ input:hover {
 .col:hover .col-item-edit {
     color: black;
     cursor: pointer;
+}
+
+.col:hover span {
+    color: #0f0f0f;
 }

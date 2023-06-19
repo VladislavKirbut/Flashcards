@@ -1,7 +1,6 @@
 package flashcards.project.repository;
 
 import flashcards.project.exception.RepositoryException;
-import flashcards.project.model.Subtopic;
 import flashcards.project.model.Topic;
 
 import javax.sql.DataSource;

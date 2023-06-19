@@ -2,6 +2,7 @@ package flashcards.project.controller;
 
 import flashcards.project.model.Topic;
 import flashcards.project.service.TopicService;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -28,17 +29,12 @@ public class TopicPage extends HttpServlet {
         topicService = (TopicService) context.getAttribute("TopicService");
     }
     @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        List<Topic> topicList = topicService.showTopicList();
-        String responseText = getResponse(topicList);
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Topic> topicsList = topicService.showTopicList();
+        request.setAttribute("topics", topicsList);
 
-        res.setContentType("text/plain");
-        res.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        res.setStatus(HttpServletResponse.SC_OK);
-
-        try (Writer writer = res.getWriter()) {
-            writer.write(responseText);
-        }
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/topic.jsp");
+        dispatcher.forward(request, response);
     }
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

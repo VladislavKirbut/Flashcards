@@ -26,6 +26,6 @@ public class UpdateCardPage extends HttpServlet {
         int subtopicId = Integer.parseInt(request.getParameter("subtopicId"));
 
         trainingService.clickKnow(cardId);
-        response.sendRedirect(request.getContextPath() + TrainingPage.PATH + "?topicId=" + topicId + "&subtopicId=" + subtopicId + "&previousCardId=" + cardId);
+        response.sendRedirect(request.getContextPath() + TrainingPage.PATH + "?topicId=" + topicId + "&subtopicId=" + subtopicId + "&previousCard=" + cardId);
     }
 }

@@ -49,14 +49,11 @@ input:hover {
     display: block;
     text-decoration: none;
     padding-top: 10px;
+    padding-bottom: 10px;
     color: #fff;
     transition: 0.9s;
     font-size: 18px;
     font-weight: normal;
-}
-
-.row {
-    height: 50px;
 }
 
 .col {
@@ -68,6 +65,7 @@ input:hover {
 .topic-form {
     text-align: center;
     margin-top: 3rem;
+    margin-bottom: 90px;
 }
 
 .topic-cards {

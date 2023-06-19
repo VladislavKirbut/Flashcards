@@ -2,6 +2,7 @@ package flashcards.project.controller;
 
 import flashcards.project.model.Card;
 import flashcards.project.service.TrainingService;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,19 +25,20 @@ public class TrainingFirstCard extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int subtopicId = Integer.parseInt(req.getParameter("subtopicId"));
-        int topicId = Integer.parseInt(req.getParameter("topicId"));
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int subtopicId = Integer.parseInt(request.getParameter("subtopicId"));
+        int topicId = Integer.parseInt(request.getParameter("topicId"));
 
-        String responseText = trainingService.getFirst(subtopicId)
-                .map(Card::toString)
-                .orElse(CARD_IS_MISSING);
+        Card card = trainingService.getFirst(subtopicId).orElseThrow();
 
-        try (Writer writer = resp.getWriter()) {
-            if (responseText.equals(CARD_IS_MISSING))
-                resp.sendRedirect(req.getContextPath() + SubtopicPage.PATH + "?topicId=" + topicId + "&subtopicId="
-                        + subtopicId);
-            else writer.write(responseText);
-        }
+/*        response.sendRedirect(request.getContextPath() + SubtopicPage.PATH + "?topicId=" + topicId + "&subtopicId="
+                + subtopicId);*/
+
+        request.setAttribute("subtopicId", subtopicId);
+        request.setAttribute("topicId", topicId);
+        request.setAttribute("card", card);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/training.jsp");
+        dispatcher.forward(request, response);
     }
 }

@@ -46,6 +46,7 @@ input:hover {
 }
 
 .col-item {
+    position:relative;
     display: block;
     text-decoration: none;
     padding-top: 10px;
@@ -54,10 +55,6 @@ input:hover {
     transition: 0.9s;
     font-size: 18px;
     font-weight: normal;
-}
-
-.row {
-    height: 50px;
 }
 
 .subtopic-cards {
@@ -72,7 +69,7 @@ input:hover {
 
 .subtopic-form {
     text-align: center;
-    padding-bottom: 100px;
+    padding-bottom: 70px;
 }
 
 .col:hover {
@@ -103,13 +100,21 @@ input:hover {
     left: 12rem;
 }
 
-.col-item-del {
-    display: inline-block;
-    margin-left: 10rem;
-    color: #ffffff;
-}
-
 .col:hover .col-item-del {
     color: black;
     font-weight: bold;
+}
+
+.del-form {
+    display: inline-block;
+
+}
+
+.del-card {
+    padding: 0;
+    border: none;
+    background-color: rgba(249,223,105, -0.1);
+    margin-left: 70px;
+    position: absolute;
+    top: 16px;
 }

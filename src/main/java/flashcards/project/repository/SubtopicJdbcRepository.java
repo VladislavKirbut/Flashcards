@@ -1,7 +1,6 @@
 package flashcards.project.repository;
 
 import flashcards.project.exception.RepositoryException;
-import flashcards.project.model.Card;
 import flashcards.project.model.Subtopic;
 
 import javax.sql.DataSource;
@@ -11,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class SubtopicJdbcRepository implements SubtopicRepository {
     private final DataSource db;
@@ -39,7 +37,7 @@ public class SubtopicJdbcRepository implements SubtopicRepository {
 
             ResultSet resultSet = statement.executeQuery();
             List<Subtopic> subtopicList = new ArrayList<>();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 subtopicList.add(new Subtopic(
                         resultSet.getInt("id"),
                         resultSet.getInt("topic_id"),

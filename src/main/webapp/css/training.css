@@ -68,12 +68,13 @@
     position: absolute;
     width: 400px;
     min-height: 300px;
+    background-color: #fff;
 }
 
 .rotate-card {
     display: none;
     top: 17rem;
-    left: 27.5rem;
+    left: 25.62rem;
     position: absolute;
     width: 400px;
     min-height: 300px;
