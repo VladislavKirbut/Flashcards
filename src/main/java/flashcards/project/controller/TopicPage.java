@@ -11,11 +11,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static flashcards.project.controller.TopicPage.PATH;
-import static flashcards.project.util.ServletsUtils.getResponse;
 
 @WebServlet(urlPatterns = PATH)
 public class TopicPage extends HttpServlet {

@@ -35,7 +35,7 @@
         <div class="subtopic-cards">
             <div class="row row-cols-3">
                 <c:if test="${subtopics.isEmpty()}">
-                    <p>Subtopics don't exist</p>
+                    <div class="empty-text">Subtopics don't exist</div>
                 </c:if>
 
                 <c:if test="${!subtopics.isEmpty()}">

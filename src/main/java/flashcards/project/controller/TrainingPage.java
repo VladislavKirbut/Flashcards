@@ -11,8 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 
 import static flashcards.project.controller.TrainingPage.PATH;
 
@@ -20,7 +18,6 @@ import static flashcards.project.controller.TrainingPage.PATH;
 public class TrainingPage extends HttpServlet {
     private TrainingService trainingService;
     public static final String PATH = "/topicPage/subtopicPage/trainingPage";
-    private static final String CARD_IS_MISSING = "Card is missing";
 
     @Override
     public void init() {

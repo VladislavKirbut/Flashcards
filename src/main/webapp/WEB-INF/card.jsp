@@ -34,7 +34,7 @@
         <div class="subtopic-cards">
           <div class="row row-cols-3">
             <c:if test="${cards.isEmpty()}">
-              <p>Cards don't exist</p>
+              <div class="empty-text">Cards don't exist</div>
             </c:if>
             <c:if test="${!cards.isEmpty()}">
               <c:forEach var="card" items="${cards}">

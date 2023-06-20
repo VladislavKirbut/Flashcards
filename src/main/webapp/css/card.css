@@ -118,3 +118,13 @@ input:hover {
     position: absolute;
     top: 16px;
 }
+
+div.empty-text {
+    margin: auto;
+    display: block;
+    color: white;
+    text-align: center;
+    font-family: Arial sans-serif;
+    font-weight: bold;
+    font-size: 25px;
+}

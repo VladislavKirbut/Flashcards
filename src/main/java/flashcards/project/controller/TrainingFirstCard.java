@@ -11,12 +11,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.Writer;
 
 @WebServlet(urlPatterns = "/topicPage/subtopicPage/trainingFirstPage")
 public class TrainingFirstCard extends HttpServlet {
     private TrainingService trainingService;
-    private static final String CARD_IS_MISSING = "Card is missing";
 
     @Override
     public void init() {
@@ -29,16 +27,18 @@ public class TrainingFirstCard extends HttpServlet {
         int subtopicId = Integer.parseInt(request.getParameter("subtopicId"));
         int topicId = Integer.parseInt(request.getParameter("topicId"));
 
-        Card card = trainingService.getFirst(subtopicId).orElseThrow();
+        Card card = trainingService.getFirst(subtopicId).orElse(null);
 
-/*        response.sendRedirect(request.getContextPath() + SubtopicPage.PATH + "?topicId=" + topicId + "&subtopicId="
-                + subtopicId);*/
+        if (card == null) {
+            response.sendRedirect(request.getContextPath() + SubtopicPage.PATH + "?topicId=" + topicId + "&subtopicId="
+                    + subtopicId);
+        } else {
+            request.setAttribute("subtopicId", subtopicId);
+            request.setAttribute("topicId", topicId);
+            request.setAttribute("card", card);
 
-        request.setAttribute("subtopicId", subtopicId);
-        request.setAttribute("topicId", topicId);
-        request.setAttribute("card", card);
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/training.jsp");
-        dispatcher.forward(request, response);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/training.jsp");
+            dispatcher.forward(request, response);
+        }
     }
 }
