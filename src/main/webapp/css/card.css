@@ -1,0 +1,130 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+input {
+    border:none;
+    border-radius: 5px;
+    padding: 7px 5px;
+    width: 20rem;
+}
+
+.body {
+    background-color: #627875;
+}
+
+.add-button {
+    margin-left: 20px;
+    background-color: rgba(249,223,105, 0.7);
+    color: #fff;
+    border: 1px solid rgba(249,223,105,1);
+    border-radius: 10px;
+    box-shadow: 2px -1.5px 20px rgba(249,223,105);
+    padding: 8px 10px;
+}
+
+.add-button:hover {
+    background-color: rgba(249,223,105, 0.9);
+    cursor: pointer;
+}
+
+input:focus {
+    outline: 2px solid rgba(249,223,105, 0.9);
+}
+
+input:hover {
+    outline: 2px solid rgba(249,223,105, 1);
+}
+
+.subtopic-section {
+    margin-top: 100px;
+}
+
+.container {
+    height: 500px;
+}
+
+.col-item {
+    position:relative;
+    display: block;
+    text-decoration: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #fff;
+    transition: 0.9s;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.subtopic-cards {
+    margin-top: 30px;
+}
+
+.col {
+    background-color: rgba(249,223,105, 0.6);
+    transition: 0.9s;
+    text-align: center;
+}
+
+.subtopic-form {
+    text-align: center;
+    padding-bottom: 70px;
+}
+
+.col:hover {
+    background-color: white;
+}
+
+.col:hover .col-item {
+    color: #0f0f0f;
+}
+
+.delete-button {
+    margin-left: 20px;
+    background-color: #f32b2b;
+    color: #fff;
+    border: 1px solid #f80303;
+    border-radius: 10px;
+    box-shadow: 2px -1.5px 20px #f80303;
+    padding: 8px 10px;
+}
+
+.delete-button:hover {
+    background-color: #fa1313;
+}
+
+.subtopic-del-form {
+    position: absolute;
+    top: 98px;
+    left: 12rem;
+}
+
+.col:hover .col-item-del {
+    color: black;
+    font-weight: bold;
+}
+
+.del-form {
+    display: inline-block;
+
+}
+
+.del-card {
+    padding: 0;
+    border: none;
+    background-color: rgba(249,223,105, -0.1);
+    margin-left: 70px;
+    position: absolute;
+    top: 16px;
+}
+
+div.empty-text {
+    margin: auto;
+    display: block;
+    color: white;
+    text-align: center;
+    font-family: Arial sans-serif;
+    font-weight: bold;
+    font-size: 25px;
+}

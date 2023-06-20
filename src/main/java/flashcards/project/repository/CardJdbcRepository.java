@@ -68,7 +68,7 @@ public class CardJdbcRepository implements CardRepository {
         ) {
             statement.setInt(1, subtopicId);
             statement.setString(2, question);
-            statement.setString(3, question);
+            statement.setString(3, answer);
             statement.setBoolean(4, learned);
 
             statement.executeUpdate();
@@ -97,7 +97,7 @@ public class CardJdbcRepository implements CardRepository {
     }
 
     @Override
-    public void updateCard(int id, boolean learned) {
+    public boolean updateCard(int id, boolean learned) {
         String sql = """
                 UPDATE card
                 SET learned = ?
@@ -110,15 +110,14 @@ public class CardJdbcRepository implements CardRepository {
         ) {
             statement.setBoolean(1, learned);
             statement.setInt(2, id);
-            statement.executeUpdate();
-
+            return statement.executeUpdate() == 1;
         } catch (SQLException exception) {
             throw new RepositoryException(exception);
         }
     }
 
     @Override
-    public Optional<Card> showOneNotLearnedCard(int subtopicId, int offset) {
+    public Optional<Card> showOneNotLearnedCard(int subtopicId, int greaterThanCardId) {
         String sql = """
                 SELECT id,
                        subtopic_id,
@@ -126,9 +125,9 @@ public class CardJdbcRepository implements CardRepository {
                        answer,
                        learned
                 FROM card
-                WHERE subtopic_id = ? AND NOT learned;
+                WHERE subtopic_id = ? AND NOT learned AND id > ?
                 ORDER BY id
-                OFFSET ? LIMIT 1;
+                LIMIT 1;
                 """;
 
         try (
@@ -136,7 +135,7 @@ public class CardJdbcRepository implements CardRepository {
                 PreparedStatement statement = connection.prepareStatement(sql);
         ) {
             statement.setInt(1, subtopicId);
-            statement.setInt(2, offset);
+            statement.setInt(2, greaterThanCardId);
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {

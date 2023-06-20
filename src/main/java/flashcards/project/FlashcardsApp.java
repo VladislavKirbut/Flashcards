@@ -2,125 +2,56 @@ package flashcards.project;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import flashcards.project.exception.IncorrectCommand;
-import flashcards.project.model.Card;
-import flashcards.project.model.Subtopic;
-import flashcards.project.model.Topic;
 import flashcards.project.repository.*;
+import flashcards.project.service.*;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.annotation.WebListener;
 
-import java.util.List;
-import java.util.Scanner;
-public class FlashcardsApp {
-    private final static int GET_TOPIC_COMMAND_SIZE = 1;
-    private final static int GET_SUBTOPIC_COMMAND_SIZE = 2;
-    private final static int ADD_TOPIC_COMMAND_SIZE = 2;
-    private final static int REMOVE_TOPIC_COMMAND_SIZE = 2;
-    private final static int SHOW_ONE_CARD_COMMAND_SIZE = 3;
-    private final static int GET_CARDS_COMMAND_SIZE = 2;
-    private final static int ADD_SUBTOPIC_COMMAND_SIZE = 3;
-    private final static int REMOVE_SUBTOPIC_COMMAND_SIZE = 2;
-    private final static int ADD_CARD_COMMAND_SIZE = 5;
-    private final static int REMOVE_CARD_COMMAND_SIZE = 2;
-    private final static int UPDATE_CARD_COMMAND_SIZE = 3;
-    private final static Scanner scanner = new Scanner(System.in);
-    public static void main(String[] args) {
+@WebListener
+public class FlashcardsApp implements ServletContextListener {
+
+    private static final String HIKARI_DATA_SOURCE = "HikariDataSource";
+    private static final String TOPIC_REPOSITORY = "TopicRepository";
+    private static final String SUBTOPIC_REPOSITORY = "SubtopicRepository";
+    private static final String CARD_REPOSITORY = "CardRepository";
+    private static final String CARD_SERVICE = "CardService";
+    private static final String SUBTOPIC_SERVICE = "SubtopicService";
+    private static final String TOPIC_SERVICE = "TopicService";
+    private static final String TRAINING_SERVICE = "TrainingService";
+
+    @Override
+    public void contextInitialized(ServletContextEvent event) {
         HikariConfig config = new HikariConfig();
         config.setUsername(System.getenv("POSTGRES_DB_USER"));
         config.setPassword(System.getenv("POSTGRES_DB_PASSWORD"));
         config.setJdbcUrl(System.getenv("POSTGRES_DB_URL"));
+        config.setDriverClassName("org.postgresql.Driver");
 
-        try (HikariDataSource database = new HikariDataSource(config)) {
-            TopicRepository topicrepository = new TopicJdbcRepository(database);
-            SubtopicRepository subtopicRepository = new SubtopicJdbcRepository(database);
-            CardRepository cardRepository = new CardJdbcRepository(database);
+        HikariDataSource database = new HikariDataSource(config);
+        TopicRepository topicRepository = new TopicJdbcRepository(database);
+        SubtopicRepository subtopicRepository = new SubtopicJdbcRepository(database);
+        CardRepository cardRepository = new CardJdbcRepository(database);
+        CardService cardService = new CardServiceImpl(cardRepository, subtopicRepository);
+        SubtopicService subtopicService = new SubtopicServiceImpl(subtopicRepository, topicRepository);
+        TopicService topicService = new TopicServiceImpl(topicRepository);
+        TrainingService trainingService = new TrainingModeService(cardRepository, subtopicRepository);
 
-            System.out.print("""
-                    TOPIC
-                    - getAllTopicList
-                    - getSubtopicByTopicId    <topicId>
-                    - addTopic                <topicTitle>
-                    - removeTopic             <id>
-                                        
-                    SUBTOPIC
-                    - getCardsBySubtopicId    <subtopicId>
-                    - addSubtopic             <topicId> <subtopicTitle>
-                    - removeSubtopic          <id>
-                                        
-                    CARD
-                    - addCard                 <subtopicId> <question> <answer> <learned>
-                    - removeCard              <cardId>
-                    - updateCard              <id> <learned>
-                    - showOneNotLearnedCard   <subtopicId> <offset>
-                    """);
-
-            while (true) {
-
-                String input = scanner.nextLine();
-                String[] inputParts = input.split("\\s+");
-
-                switch (inputParts[0]) {
-                    case "getAllTopicList" -> {
-                        if (inputParts.length != GET_TOPIC_COMMAND_SIZE) throw new IncorrectCommand();
-                        List<Topic> topicList = topicrepository.getAllTopicList();
-                        printList(topicList);
-                    }
-                    case "getSubtopicByTopicId" -> {
-                        if (inputParts.length != GET_SUBTOPIC_COMMAND_SIZE) throw new IncorrectCommand();
-
-                        int topicId = Integer.parseInt(inputParts[1]);
-                        List<Subtopic> subtopicList = subtopicRepository.getSubtopicByTopicId(topicId);
-                        printList(subtopicList);
-                    }
-                    case "addTopic" -> {
-                        if (inputParts.length != ADD_TOPIC_COMMAND_SIZE) throw new IncorrectCommand();
-                        topicrepository.addTopic(inputParts[1]);
-                    }
-                    case "removeTopic" -> {
-                        if (inputParts.length != REMOVE_TOPIC_COMMAND_SIZE) throw new IncorrectCommand();
-                        topicrepository.removeTopicById(Integer.parseInt(inputParts[1]));
-                    }
-                    case "getCardsBySubtopicId" -> {
-                        if (inputParts.length != GET_CARDS_COMMAND_SIZE) throw new IncorrectCommand();
-                        List<Card> cardsList = cardRepository.getCardsBySubtopicId(Integer.parseInt(inputParts[1]));
-                        printList(cardsList);
-                    }
-                    case "addSubtopic" -> {
-                        if (inputParts.length != ADD_SUBTOPIC_COMMAND_SIZE) throw new IncorrectCommand();
-                        subtopicRepository.addSubtopicBySubtopicTitle(Integer.parseInt(inputParts[1]), inputParts[2]);
-                    }
-                    case "removeSubtopic" -> {
-                        if (inputParts.length != REMOVE_SUBTOPIC_COMMAND_SIZE) throw new IncorrectCommand();
-                        subtopicRepository.removeSubtopicById(Integer.parseInt(inputParts[1]));
-                    }
-                    case "addCard" -> {
-                        if (inputParts.length != ADD_CARD_COMMAND_SIZE) throw new IncorrectCommand();
-                        cardRepository.addCard(Integer.parseInt(inputParts[1]),
-                                inputParts[2], inputParts[3], Boolean.parseBoolean(inputParts[4]));
-                    }
-                    case "removeCard" -> {
-                        if (inputParts.length != REMOVE_CARD_COMMAND_SIZE) throw new IncorrectCommand();
-                        cardRepository.removeCard(Integer.parseInt(inputParts[1]));
-                    }
-                    case "updateCard" -> {
-                        if (inputParts.length != UPDATE_CARD_COMMAND_SIZE) throw new IncorrectCommand();
-                        cardRepository.updateCard(Integer.parseInt(inputParts[1]), Boolean.parseBoolean(inputParts[2]));
-                    }
-                    case "showOneNotLearnedCard" -> {
-                        if (inputParts.length != SHOW_ONE_CARD_COMMAND_SIZE) throw new IncorrectCommand();
-                        String result = cardRepository.showOneNotLearnedCard(
-                                        Integer.parseInt(inputParts[1]), Integer.parseInt(inputParts[2]))
-                                .map(card -> "" + card)
-                                .orElse("Cards absent");
-                        System.out.println(result);
-                    }
-                    default -> throw new IncorrectCommand();
-                }
-            }
-        }
+        ServletContext context = event.getServletContext();
+        context.setAttribute(HIKARI_DATA_SOURCE, database);
+        context.setAttribute(TOPIC_REPOSITORY, topicRepository);
+        context.setAttribute(SUBTOPIC_REPOSITORY, subtopicRepository);
+        context.setAttribute(CARD_REPOSITORY, cardRepository);
+        context.setAttribute(CARD_SERVICE, cardService);
+        context.setAttribute(SUBTOPIC_SERVICE, subtopicService);
+        context.setAttribute(TOPIC_SERVICE, topicService);
+        context.setAttribute(TRAINING_SERVICE, trainingService);
     }
-    private static <T> void printList(List<T> list) {
-        for (T element : list) {
-            System.out.println(element);
-        }
+    @Override
+    public void contextDestroyed(ServletContextEvent event) {
+        ServletContext context = event.getServletContext();
+        HikariDataSource dataSource = (HikariDataSource) context.getAttribute("HikariDataSource");
+        dataSource.close();
     }
 }

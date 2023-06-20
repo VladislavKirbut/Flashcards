@@ -1,0 +1,82 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+input {
+    border:none;
+    border-radius: 5px;
+    padding: 7px 5px;
+    width: 30rem;
+}
+
+.body {
+    background-color: #627875;
+}
+
+.add-button {
+    margin-left: 20px;
+    background-color: rgba(249,223,105, 0.7);
+    color: #fff;
+    border: 1px solid rgba(249,223,105,1);
+    border-radius: 10px;
+    box-shadow: 2px -1.5px 20px rgba(249,223,105);
+    padding: 8px 10px;
+}
+
+button:hover {
+    background-color: rgba(249,223,105, 0.9);
+    cursor: pointer;
+}
+
+input:focus {
+    outline: 2px solid rgba(249,223,105, 0.9);
+}
+
+input:hover {
+    outline: 2px solid rgba(249,223,105, 1);
+}
+
+.topic-section {
+    margin-top: 100px;
+}
+
+.container {
+    height: 500px;
+}
+
+.col-item {
+    display: block;
+    text-decoration: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #fff;
+    transition: 0.9s;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.col {
+    background-color: rgba(249,223,105, 0.6);
+    transition: 0.9s;
+    text-align: center;
+}
+
+.topic-form {
+    text-align: center;
+    margin-top: 3rem;
+    margin-bottom: 90px;
+}
+
+.topic-cards {
+    margin-top: 30px;
+}
+
+.col:hover {
+    background-color: white;
+    cursor: pointer;
+}
+
+.col:hover .col-item {
+    color: #0f0f0f;
+}

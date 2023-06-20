@@ -1,6 +1,5 @@
 package flashcards.project.repository;
 
-import flashcards.project.model.Card;
 import flashcards.project.model.Subtopic;
 
 import java.util.List;
